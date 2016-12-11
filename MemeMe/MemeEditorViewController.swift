@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MemeEditorViewController: UIViewController {
 
     @IBOutlet weak var memeView: UIImageView!
     @IBOutlet weak var cameraButton: UIButton!
@@ -23,13 +23,6 @@ class ViewController: UIViewController {
     let topTextFieldDelegate = MemeTextFieldDelegate()
     let bottomTextFieldDelegate = MemeTextFieldDelegate()
     var isAlreadyEditting = false;
-    
-    struct Meme {
-        var topText: String
-        var bottomText: String
-        var originalImage: UIImage?
-        var memedImage: UIImage?
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -76,7 +69,7 @@ class ViewController: UIViewController {
     func keyboardWillShow(_ notification:Notification) {
         cancelButton.isEnabled = false;
         if (bottomTextField.isEditing && !isAlreadyEditting) {
-            view.frame.origin.y -= getKeyboardHeight(notification)
+            view.frame.origin.y = getKeyboardHeight(notification) * (-1)
             isAlreadyEditting = true;
         }
     }
@@ -84,7 +77,7 @@ class ViewController: UIViewController {
     func keyboardWillHide(_ notification:Notification) {
         cancelButton.isEnabled = true;
         if (isAlreadyEditting) {
-            view.frame.origin.y += getKeyboardHeight(notification)
+            view.frame.origin.y = 0
             isAlreadyEditting = false;
         }
     }
@@ -123,9 +116,11 @@ class ViewController: UIViewController {
         activityViewController.popoverPresentationController?.sourceView = self.view
         self.present(activityViewController, animated: true, completion: nil)
         activityViewController.completionWithItemsHandler = {
-            type, completed, items, error in
-            if (error == nil) {
+            (type, completed, items, error) in
+            if completed {
                 self.save(memedImage)
+                // TODO: this will be useful in MemeMe v2.0
+                self.dismiss(animated: true, completion: nil)
             }
         }
     }
