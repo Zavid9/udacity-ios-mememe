@@ -105,7 +105,7 @@ class MemeEditorViewController: UIViewController {
             NSFontAttributeName: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
             NSStrokeWidthAttributeName: -5.0]
         textField.defaultTextAttributes = memeTextAttributes
-        
+
         textField.contentVerticalAlignment = UIControlContentVerticalAlignment.center;
         textField.textAlignment = NSTextAlignment.center;
     }
@@ -119,7 +119,6 @@ class MemeEditorViewController: UIViewController {
             (type, completed, items, error) in
             if completed {
                 self.save(memedImage)
-                // TODO: this will be useful in MemeMe v2.0
                 self.dismiss(animated: true, completion: nil)
             }
         }
@@ -127,10 +126,14 @@ class MemeEditorViewController: UIViewController {
     
     func save(_ image: UIImage) {
         // create the meme
-        _ = Meme(topText: topTextField.text!,
+        let meme = Meme(topText: topTextField.text!,
                         bottomText: bottomTextField.text!,
                         originalImage: memeView.image!,
                         memedImage: image)
+        
+        // Add it to the memes array in the Application Delegate
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.memes.append(meme)
     }
     
     func generateMemedImage() -> UIImage {
@@ -153,7 +156,8 @@ class MemeEditorViewController: UIViewController {
     }
     
     @IBAction func cancel(_ sender: Any) {
-        setInitialAppState();
+        setInitialAppState()
+        self.dismiss(animated: true, completion: nil)
     }
     
     func setInitialAppState() {
@@ -167,4 +171,3 @@ class MemeEditorViewController: UIViewController {
     }
 
 }
-

@@ -18,7 +18,6 @@ class MemeImagePickerControllerDelegate: NSObject, UIImagePickerControllerDelega
         imageView!.image = info[UIImagePickerControllerOriginalImage] as? UIImage
         picker.dismiss(animated: true, completion: nil)
         shareButton?.isEnabled = true
-        
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
